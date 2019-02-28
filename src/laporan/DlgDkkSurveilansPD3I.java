@@ -129,7 +129,6 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
 
         jPopupMenu1.setName("jPopupMenu1"); // NOI18N
 
-        MnLaporanBiayaRalan.setBackground(new java.awt.Color(255, 255, 255));
         MnLaporanBiayaRalan.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         MnLaporanBiayaRalan.setForeground(java.awt.Color.darkGray);
         MnLaporanBiayaRalan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/picture/PatientFile.png"))); // NOI18N
@@ -152,7 +151,7 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
             }
         });
 
-        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Surveilans Data AFP & PD3I ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(90, 120, 80))); // NOI18N
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Surveilans Data AFP & PD3I ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(70, 70, 70))); // NOI18N
         internalFrame1.setName("internalFrame1"); // NOI18N
         internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
 
@@ -186,7 +185,6 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
         label11.setPreferredSize(new java.awt.Dimension(65, 23));
         panelGlass5.add(label11);
 
-        Tgl1.setEditable(false);
         Tgl1.setDisplayFormat("dd-MM-yyyy");
         Tgl1.setName("Tgl1"); // NOI18N
         Tgl1.setPreferredSize(new java.awt.Dimension(100, 23));
@@ -198,7 +196,6 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
         label18.setPreferredSize(new java.awt.Dimension(30, 23));
         panelGlass5.add(label18);
 
-        Tgl2.setEditable(false);
         Tgl2.setDisplayFormat("dd-MM-yyyy");
         Tgl2.setName("Tgl2"); // NOI18N
         Tgl2.setPreferredSize(new java.awt.Dimension(100, 23));
@@ -274,7 +271,7 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null,"Maaf, data sudah habis. Tidak ada data yang bisa anda print...!!!!");
             //TCari.requestFocus();
         }else if(tabMode.getRowCount()!=0){
-            Sequel.AutoComitFalse();
+            
             Sequel.queryu("delete from temporary");
             for(int r=0;r<tabMode.getRowCount();r++){  
                     Sequel.menyimpan("temporary","'0','"+
@@ -291,7 +288,7 @@ public final class DlgDkkSurveilansPD3I extends javax.swing.JDialog {
                                     tabMode.getValueAt(r,10).toString().replaceAll("'","`")+"','"+
                                     tabMode.getValueAt(r,11).toString().replaceAll("'","`")+"','','','','','','','','','','','','','','','','','','','','','','','','',''","Rekap Nota Pembayaran");
             }
-            Sequel.AutoComitTrue();
+            
             Map<String, Object> param = new HashMap<>(); 
                 param.put("namars",var.getnamars());
                 param.put("kotars",var.getkabupatenrs());

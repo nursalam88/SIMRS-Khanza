@@ -42,12 +42,13 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
     private final Connection koneksi=koneksiDB.condb();
     private final sekuel Sequel=new sekuel();
     private final validasi Valid=new validasi();
-    private PreparedStatement pstanggal,pspoli,psreg;
+    private PreparedStatement pstanggal,pspoli,psreg,pspenyakit;
     private DlgCariPoli poli=new DlgCariPoli(null,false);
     private DlgPenanggungJawab penjab=new DlgPenanggungJawab(null,false);
-    private ResultSet rstanggal,rspoli,rsreg;
+    private ResultSet rstanggal,rspoli,rsreg,rspenyakit;
     private int i=0,jmllama=0,jmlbaru=0,jmllaki=0,jmlper=0;
-    private String lama="",baru="",rujukandari="",alamatrujukandari="",dirujukke="",namapeyakit="",kodepenyakit="";
+    private String lama="",baru="",rujukandari="",alamatrujukandari="",dirujukke="";
+    private StringBuilder htmlContent;
     /** Creates new form DlgLhtBiaya
      * @param parent
      * @param modal */
@@ -61,11 +62,23 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         if(koneksiDB.cariCepat().equals("aktif")){
             TCari.getDocument().addDocumentListener(new javax.swing.event.DocumentListener(){
                 @Override
-                public void insertUpdate(DocumentEvent e) {tampil();}
+                public void insertUpdate(DocumentEvent e) {
+                    if(TCari.getText().length()>2){
+                        tampil();
+                    }
+                }
                 @Override
-                public void removeUpdate(DocumentEvent e) {tampil();}
+                public void removeUpdate(DocumentEvent e) {
+                    if(TCari.getText().length()>2){
+                        tampil();
+                    }
+                }
                 @Override
-                public void changedUpdate(DocumentEvent e) {tampil();}
+                public void changedUpdate(DocumentEvent e) {
+                    if(TCari.getText().length()>2){
+                        tampil();
+                    }
+                }
             });
         }  
         
@@ -135,10 +148,10 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         LoadHTML2.setEditorKit(kit);
         StyleSheet styleSheet = kit.getStyleSheet();
         styleSheet.addRule(
-                ".isi td{border-right: 1px solid #edf2e8;font: 8.5px tahoma;height:12px;border-bottom: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"+
-                ".isi2 td{font: 8.5px tahoma;height:12px;background: #ffffff;color:#5a7850;}"+
-                ".isi3 td{border-right: 1px solid #edf2e8;font: 8.5px tahoma;height:12px;border-top: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"+
-                ".isi4 td{font: 11px tahoma;height:12px;border-top: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"
+                ".isi td{border-right: 1px solid #e2e7dd;font: 8.5px tahoma;height:12px;border-bottom: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"+
+                ".isi2 td{font: 8.5px tahoma;height:12px;background: #ffffff;color:#464646;}"+
+                ".isi3 td{border-right: 1px solid #e2e7dd;font: 8.5px tahoma;height:12px;border-top: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"+
+                ".isi4 td{font: 11px tahoma;height:12px;border-top: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"
         );
         Document doc = kit.createDefaultDocument();
         LoadHTML.setDocument(doc);
@@ -197,7 +210,7 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
             }
         });
 
-        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Data Sensus Harian Pasien Poliklinik ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(90, 120, 80))); // NOI18N
+        internalFrame1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(240, 245, 235)), "::[ Data Sensus Harian Pasien Poliklinik ]::", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(70, 70, 70))); // NOI18N
         internalFrame1.setName("internalFrame1"); // NOI18N
         internalFrame1.setLayout(new java.awt.BorderLayout(1, 1));
 
@@ -210,8 +223,6 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         label11.setPreferredSize(new java.awt.Dimension(50, 23));
         panelGlass5.add(label11);
 
-        Tgl1.setBackground(new java.awt.Color(245, 250, 240));
-        Tgl1.setEditable(false);
         Tgl1.setDisplayFormat("dd-MM-yyyy");
         Tgl1.setName("Tgl1"); // NOI18N
         Tgl1.setPreferredSize(new java.awt.Dimension(90, 23));
@@ -223,8 +234,6 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         label18.setPreferredSize(new java.awt.Dimension(25, 23));
         panelGlass5.add(label18);
 
-        Tgl2.setBackground(new java.awt.Color(245, 250, 240));
-        Tgl2.setEditable(false);
         Tgl2.setDisplayFormat("dd-MM-yyyy");
         Tgl2.setName("Tgl2"); // NOI18N
         Tgl2.setPreferredSize(new java.awt.Dimension(90, 23));
@@ -400,9 +409,9 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
 
         internalFrame1.add(panelisi4, java.awt.BorderLayout.PAGE_START);
 
-        TabRawat.setBackground(new java.awt.Color(250, 255, 245));
-        TabRawat.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(230, 235, 225)));
-        TabRawat.setForeground(new java.awt.Color(90, 120, 80));
+        TabRawat.setBackground(new java.awt.Color(255, 255, 254));
+        TabRawat.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(241, 246, 236)));
+        TabRawat.setForeground(new java.awt.Color(70, 70, 70));
         TabRawat.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
         TabRawat.setName("TabRawat"); // NOI18N
         TabRawat.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -457,10 +466,10 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
             File g = new File("file2.css");            
             BufferedWriter bg = new BufferedWriter(new FileWriter(g));
             bg.write(
-                    ".isi td{border-right: 1px solid #edf2e8;font: 11px tahoma;height:12px;border-bottom: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"+
-                    ".isi2 td{font: 11px tahoma;height:12px;background: #ffffff;color:#5a7850;}"+                    
-                    ".isi3 td{border-right: 1px solid #edf2e8;font: 11px tahoma;height:12px;border-top: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"+
-                    ".isi4 td{font: 11px tahoma;height:12px;border-top: 1px solid #edf2e8;background: #ffffff;color:#5a7850;}"
+                    ".isi td{border-right: 1px solid #e2e7dd;font: 11px tahoma;height:12px;border-bottom: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"+
+                    ".isi2 td{font: 11px tahoma;height:12px;background: #ffffff;color:#464646;}"+                    
+                    ".isi3 td{border-right: 1px solid #e2e7dd;font: 11px tahoma;height:12px;border-top: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"+
+                    ".isi4 td{font: 11px tahoma;height:12px;border-top: 1px solid #e2e7dd;background: #ffffff;color:#464646;}"
             );
             bg.close();
             
@@ -544,7 +553,7 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
 
     private void BtnSeek2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSeek2ActionPerformed
         poli.isCek();
-        poli.setSize(internalFrame1.getWidth()-40,internalFrame1.getHeight()-40);
+        poli.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
         poli.setLocationRelativeTo(internalFrame1);
         poli.setAlwaysOnTop(false);
         poli.setVisible(true);
@@ -570,7 +579,7 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
 
     private void BtnSeek3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnSeek3ActionPerformed
         penjab.isCek();
-        penjab.setSize(internalFrame1.getWidth()-40,internalFrame1.getHeight()-40);
+        penjab.setSize(internalFrame1.getWidth()-20,internalFrame1.getHeight()-20);
         penjab.setLocationRelativeTo(internalFrame1);
         penjab.setAlwaysOnTop(false);
         penjab.setVisible(true);
@@ -688,7 +697,7 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
             jmllama=0;jmlbaru=0;jmllaki=0;jmlper=0;
-            StringBuilder htmlContent = new StringBuilder();
+            htmlContent = new StringBuilder();
             pstanggal=koneksi.prepareStatement("select tgl_registrasi,DATE_FORMAT(tgl_registrasi,'%d-%m-%Y') as tanggal from reg_periksa where tgl_registrasi between ? and ? group by tgl_registrasi order by tgl_registrasi ");
             try {
                 pstanggal.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -718,31 +727,29 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
-                                    "<td valign='top' align='center'></td>"+
                                 "</tr>"+
                                 "<tr class='isi2'>"+
-                                    "<td valign='top' colspan='2'>Poliklinik</td><td valign='top' colspan='11'>: "+rspoli.getString("nm_poli")+"</td>"+
+                                    "<td valign='top' colspan='2'>Poliklinik</td><td valign='top' colspan='10'>: "+rspoli.getString("nm_poli")+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi2'>"+
-                                    "<td valign='top' colspan='2'>Tanggal</td><td valign='top' colspan='11'>: "+rstanggal.getString("tanggal")+"</td>"+
+                                    "<td valign='top' colspan='2'>Tanggal</td><td valign='top' colspan='10'>: "+rstanggal.getString("tanggal")+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>No.</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='6%' rowspan='2'>No.RM</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='13%' rowspan='2'>Nama Pasien</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='13%' rowspan='2'>Alamat</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>L/P</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>Umur</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='6%' colspan='2'>Pengunjung</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='10%' rowspan='2'>Cara Pembayaran</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='14%' rowspan='2'>Asal Rujukan &<br>Alamatnya</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='14%' rowspan='2'>Golongan Penyakit/<br>Sebab Penyakit</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='5%' rowspan='2'>Kode ICD X</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='10%' rowspan='2'>Dirujuk Ke</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>No.</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='6%' rowspan='2'>No.RM</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='13%' rowspan='2'>Nama Pasien</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='13%' rowspan='2'>Alamat</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>L/P</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>Umur</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='6%' colspan='2'>Pengunjung</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='10%' rowspan='2'>Cara Pembayaran</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='14%' rowspan='2'>Asal Rujukan &<br>Alamatnya</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='14%' rowspan='2'>Golongan Penyakit/<br>Sebab Penyakit</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='10%' rowspan='2'>Dirujuk Ke</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+                                        
-                                    "<td valign='top' bgcolor='#f8fdf3' align='center' width='3%'>Lama</td>"+
-                                    "<td valign='top' bgcolor='#f8fdf3' align='center' width='3%'>Baru</td>"+
+                                    "<td valign='top' bgcolor='#fafff5' align='center' width='3%'>Lama</td>"+
+                                    "<td valign='top' bgcolor='#fafff5' align='center' width='3%'>Baru</td>"+
                                 "</tr>" 
                             );
                             psreg=koneksi.prepareStatement(
@@ -777,8 +784,6 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                     dirujukke=Sequel.cariIsi("select rujuk_ke from rujuk where no_rawat=?",rsreg.getString("no_rawat"));
                                     rujukandari=Sequel.cariIsi("select perujuk from rujuk_masuk where no_rawat=?",rsreg.getString("no_rawat"));
                                     alamatrujukandari=Sequel.cariIsi("select alamat from rujuk_masuk where no_rawat=?",rsreg.getString("no_rawat"));
-                                    namapeyakit=Sequel.cariIsi("select penyakit.nm_penyakit from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit where diagnosa_pasien.status='Ralan' and diagnosa_pasien.prioritas='1' and diagnosa_pasien.no_rawat=?",rsreg.getString("no_rawat"));
-                                    kodepenyakit=Sequel.cariIsi("select kd_penyakit from diagnosa_pasien where status='Ralan' and prioritas='1' and no_rawat=?",rsreg.getString("no_rawat"));
                                     if(rsreg.getString("stts_daftar").equals("Baru")){
                                         baru="V";
                                         jmlbaru=jmlbaru+1;
@@ -803,8 +808,29 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                             "<td valign='top' align='center'>"+baru+"</td>"+
                                             "<td valign='top'>"+rsreg.getString("png_jawab")+"</td>"+
                                             "<td valign='top'>"+rujukandari+" "+alamatrujukandari+"</td>"+
-                                            "<td valign='top'>"+namapeyakit+"</td>"+
-                                            "<td valign='top' align='center'>"+kodepenyakit+"</td>"+
+                                            "<td valign='top'>"+
+                                                "<table width='100%' border='0'>");
+                                    pspenyakit=koneksi.prepareStatement(
+                                            "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit where diagnosa_pasien.status='Ralan' and diagnosa_pasien.no_rawat=?");
+                                    try {
+                                        pspenyakit.setString(1,rsreg.getString("no_rawat"));
+                                        rspenyakit=pspenyakit.executeQuery();
+                                        while(rspenyakit.next()){
+                                            htmlContent.append("<tr class='isi4'><td width='25%'>"+rspenyakit.getString("kd_penyakit")+"</td><td width='75%'>"+rspenyakit.getString("nm_penyakit")+"</td></tr>");
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Note : "+e);
+                                    } finally{
+                                        if(rspenyakit!=null){
+                                            rspenyakit.close();
+                                        }
+                                        if(pspenyakit!=null){
+                                            pspenyakit.close();
+                                        }
+                                    }                                        
+                                    htmlContent.append(
+                                                "</table>"+
+                                            "</td>"+
                                             "<td valign='top'>"+dirujukke+"</td>"+
                                         "</tr>"
                                     );        
@@ -834,10 +860,8 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
-                                    "<td valign='top' align='center'></td>"+
                                 "</tr>"
-                            );    
-                            
+                            ); 
                         }
                     } catch (Exception e) {
                         System.out.println("Notifikasi Poli : "+e);
@@ -852,26 +876,26 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                 }
                 if((jmlbaru+jmllama)>0){
                     htmlContent.append(
-                                "<tr class='isi3'>"+
-                                    "<td valign='top' align='left' colspan='2'>Baru</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmlbaru+"</td>"+
-                                "</tr>"+
-                                "<tr class='isi3'>"+
-                                    "<td valign='top' align='left' colspan='2'>Lama</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmllama+"</td>"+
-                                "</tr>"+
-                                "<tr class='isi3'>"+
-                                    "<td valign='top' align='left' colspan='2'>Laki-Laki</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmllaki+"</td>"+
-                                "</tr>"+
-                                "<tr class='isi3'>"+
-                                    "<td valign='top' align='left' colspan='2'>Perempuan</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmlper+"</td>"+
-                                "</tr>"+
-                                "<tr class='isi3'>"+
-                                    "<td valign='top' align='left' colspan='2'>Total</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+(jmllama+jmlbaru)+"</td>"+
-                                "</tr>"
+                        "<tr class='isi3'>"+
+                            "<td valign='top' align='left' colspan='2'>Baru</td>"+
+                            "<td valign='top' align='left' colspan='10'>: "+jmlbaru+"</td>"+
+                        "</tr>"+
+                        "<tr class='isi3'>"+
+                            "<td valign='top' align='left' colspan='2'>Lama</td>"+
+                            "<td valign='top' align='left' colspan='10'>: "+jmllama+"</td>"+
+                        "</tr>"+
+                        "<tr class='isi3'>"+
+                            "<td valign='top' align='left' colspan='2'>Laki-Laki</td>"+
+                            "<td valign='top' align='left' colspan='10'>: "+jmllaki+"</td>"+
+                        "</tr>"+
+                        "<tr class='isi3'>"+
+                            "<td valign='top' align='left' colspan='2'>Perempuan</td>"+
+                            "<td valign='top' align='left' colspan='10'>: "+jmlper+"</td>"+
+                        "</tr>"+
+                        "<tr class='isi3'>"+
+                            "<td valign='top' align='left' colspan='2'>Total</td>"+
+                            "<td valign='top' align='left' colspan='10'>: "+(jmllama+jmlbaru)+"</td>"+
+                        "</tr>"
                      );
                 }
             } catch (Exception e) {
@@ -900,7 +924,7 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
         this.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
         try{
             jmllama=0;jmlbaru=0;jmllaki=0;jmlper=0;
-            StringBuilder htmlContent = new StringBuilder();
+            htmlContent = new StringBuilder();
             pstanggal=koneksi.prepareStatement("select tgl_registrasi,DATE_FORMAT(tgl_registrasi,'%d-%m-%Y') as tanggal from reg_periksa where stts<>'Batal' and tgl_registrasi between ? and ? group by tgl_registrasi order by tgl_registrasi ");
             try {
                 pstanggal.setString(1,Valid.SetTgl(Tgl1.getSelectedItem()+""));
@@ -930,31 +954,29 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
-                                    "<td valign='top' align='center'></td>"+
                                 "</tr>"+
                                 "<tr class='isi2'>"+
-                                    "<td valign='top' colspan='2'>Poliklinik</td><td valign='top' colspan='11'>: "+rspoli.getString("nm_poli")+"</td>"+
+                                    "<td valign='top' colspan='2'>Poliklinik</td><td valign='top' colspan='10'>: "+rspoli.getString("nm_poli")+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi2'>"+
-                                    "<td valign='top' colspan='2'>Tanggal</td><td valign='top' colspan='11'>: "+rstanggal.getString("tanggal")+"</td>"+
+                                    "<td valign='top' colspan='2'>Tanggal</td><td valign='top' colspan='10'>: "+rstanggal.getString("tanggal")+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>No.</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='6%' rowspan='2'>No.RM</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='13%' rowspan='2'>Nama Pasien</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='13%' rowspan='2'>Alamat</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>L/P</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='3%' rowspan='2'>Umur</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='6%' colspan='2'>Pengunjung</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='10%' rowspan='2'>Cara Pembayaran</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='14%' rowspan='2'>Asal Rujukan &<br>Alamatnya</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='14%' rowspan='2'>Golongan Penyakit/<br>Sebab Penyakit</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='5%' rowspan='2'>Kode ICD X</td>"+
-                                    "<td valign='middle' bgcolor='#f8fdf3' align='center' width='10%' rowspan='2'>Dirujuk Ke</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>No.</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='6%' rowspan='2'>No.RM</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='13%' rowspan='2'>Nama Pasien</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='13%' rowspan='2'>Alamat</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>L/P</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='3%' rowspan='2'>Umur</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='6%' colspan='2'>Pengunjung</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='10%' rowspan='2'>Cara Pembayaran</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='14%' rowspan='2'>Asal Rujukan &<br>Alamatnya</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='19%' rowspan='2'>Golongan Penyakit/<br>Sebab Penyakit</td>"+
+                                    "<td valign='middle' bgcolor='#fafff5' align='center' width='10%' rowspan='2'>Dirujuk Ke</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+                                        
-                                    "<td valign='top' bgcolor='#f8fdf3' align='center' width='3%'>Lama</td>"+
-                                    "<td valign='top' bgcolor='#f8fdf3' align='center' width='3%'>Baru</td>"+
+                                    "<td valign='top' bgcolor='#fafff5' align='center' width='3%'>Lama</td>"+
+                                    "<td valign='top' bgcolor='#fafff5' align='center' width='3%'>Baru</td>"+
                                 "</tr>" 
                             );
                             psreg=koneksi.prepareStatement(
@@ -989,8 +1011,6 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                     dirujukke=Sequel.cariIsi("select rujuk_ke from rujuk where no_rawat=?",rsreg.getString("no_rawat"));
                                     rujukandari=Sequel.cariIsi("select perujuk from rujuk_masuk where no_rawat=?",rsreg.getString("no_rawat"));
                                     alamatrujukandari=Sequel.cariIsi("select alamat from rujuk_masuk where no_rawat=?",rsreg.getString("no_rawat"));
-                                    namapeyakit=Sequel.cariIsi("select penyakit.nm_penyakit from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit where diagnosa_pasien.status='Ralan' and diagnosa_pasien.prioritas='1' and diagnosa_pasien.no_rawat=?",rsreg.getString("no_rawat"));
-                                    kodepenyakit=Sequel.cariIsi("select kd_penyakit from diagnosa_pasien where status='Ralan' and prioritas='1' and no_rawat=?",rsreg.getString("no_rawat"));
                                     if(rsreg.getString("stts_daftar").equals("Baru")){
                                         baru="V";
                                         jmlbaru=jmlbaru+1;
@@ -1015,11 +1035,32 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                                             "<td valign='top' align='center'>"+baru+"</td>"+
                                             "<td valign='top'>"+rsreg.getString("png_jawab")+"</td>"+
                                             "<td valign='top'>"+rujukandari+" "+alamatrujukandari+"</td>"+
-                                            "<td valign='top'>"+namapeyakit+"</td>"+
-                                            "<td valign='top' align='center'>"+kodepenyakit+"</td>"+
+                                            "<td valign='top'>"+
+                                                "<table width='100%' border='0'>");
+                                    pspenyakit=koneksi.prepareStatement(
+                                            "select diagnosa_pasien.kd_penyakit,penyakit.nm_penyakit from diagnosa_pasien inner join penyakit on diagnosa_pasien.kd_penyakit=penyakit.kd_penyakit where diagnosa_pasien.status='Ralan' and diagnosa_pasien.no_rawat=?");
+                                    try {
+                                        pspenyakit.setString(1,rsreg.getString("no_rawat"));
+                                        rspenyakit=pspenyakit.executeQuery();
+                                        while(rspenyakit.next()){
+                                            htmlContent.append("<tr class='isi4'><td width='25%'>"+rspenyakit.getString("kd_penyakit")+"</td><td width='75%'>"+rspenyakit.getString("nm_penyakit")+"</td></tr>");
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Note : "+e);
+                                    } finally{
+                                        if(rspenyakit!=null){
+                                            rspenyakit.close();
+                                        }
+                                        if(pspenyakit!=null){
+                                            pspenyakit.close();
+                                        }
+                                    }                                        
+                                    htmlContent.append(
+                                                "</table>"+
+                                            "</td>"+
                                             "<td valign='top'>"+dirujukke+"</td>"+
                                         "</tr>"
-                                    );        
+                                    );         
                                     i++;
                                 }
                             } catch (Exception e) {
@@ -1035,7 +1076,6 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                             htmlContent.append(
                                 "<tr class='isi4'>"+
                                     "<td valign='top' align='center'>&nbsp;</td>"+
-                                    "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
                                     "<td valign='top' align='center'></td>"+
@@ -1066,23 +1106,23 @@ public final class DlgSensusHarianPoli extends javax.swing.JDialog {
                     htmlContent.append(
                                 "<tr class='isi3'>"+
                                     "<td valign='top' align='left' colspan='2'>Baru</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmlbaru+"</td>"+
+                                    "<td valign='top' align='left' colspan='10'>: "+jmlbaru+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
                                     "<td valign='top' align='left' colspan='2'>Lama</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmllama+"</td>"+
+                                    "<td valign='top' align='left' colspan='10'>: "+jmllama+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
                                     "<td valign='top' align='left' colspan='2'>Laki-Laki</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmllaki+"</td>"+
+                                    "<td valign='top' align='left' colspan='10'>: "+jmllaki+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
                                     "<td valign='top' align='left' colspan='2'>Perempuan</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+jmlper+"</td>"+
+                                    "<td valign='top' align='left' colspan='10'>: "+jmlper+"</td>"+
                                 "</tr>"+
                                 "<tr class='isi3'>"+
                                     "<td valign='top' align='left' colspan='2'>Total</td>"+
-                                    "<td valign='top' align='left' colspan='11'>: "+(jmllama+jmlbaru)+"</td>"+
+                                    "<td valign='top' align='left' colspan='10'>: "+(jmllama+jmlbaru)+"</td>"+
                                 "</tr>"
                      );
                 }

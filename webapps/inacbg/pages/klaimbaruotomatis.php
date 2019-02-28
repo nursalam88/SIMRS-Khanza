@@ -48,7 +48,7 @@ if(empty($tahunawal)){
                 if(bridging_sep.jnspelayanan='1','1. Rawat Inap','2. Rawat Jalan') as jenispelayanan,bridging_sep.catatan,bridging_sep.diagawal,
                 bridging_sep.nmdiagnosaawal,bridging_sep.kdpolitujuan,bridging_sep.nmpolitujuan,bridging_sep.klsrawat,
                 if(bridging_sep.klsrawat='1','1. Kelas 1',if(bridging_sep.klsrawat='2','2. Kelas 2','3. Kelas 3')) as kelas,
-                if(bridging_sep.lakalantas='1','1. Kasus Kecelakaan','2. Bukan Kasus Kecelakaan') as lakalantas,bridging_sep.lokasilaka,bridging_sep.user, 
+                if(bridging_sep.lakalantas='1','1. Kasus Kecelakaan','2. Bukan Kasus Kecelakaan') as lakalantas,bridging_sep.user, 
                 bridging_sep.tanggal_lahir,bridging_sep.peserta,bridging_sep.jkel,bridging_sep.no_kartu, if(bridging_sep.tglpulang='0000-00-00 00:00:00',now(),bridging_sep.tglpulang) as tglpulang  
                 from bridging_sep where bridging_sep.tglsep between '".$tahunawal."-".$bulanawal."-".$tanggalawal." 00:00:00' and '".$tahunakhir."-".$bulanakhir."-".$tanggalakhir." 23:59:59' order by bridging_sep.tglsep";
         $hasil=bukaquery($_sql);
@@ -72,13 +72,13 @@ if(empty($tahunawal)){
                         if(getOne("select count(no_sep) from inacbg_data_terkirim where no_sep='".$baris["no_sep"]."'")>0){
                             $status="Terkirim INACBG";
                         }
-                        $gender="";
-                        if($baris["jkel"]=="LAKI-LAKI"){
+                        $gender = "";
+                        if($baris["jkel"]=="L"){
                             $gender="1";
                         }else{
                             $gender="2";
                         }
-                        
+
                         $prosedur="";
                         $a=1;
                         $hasilprosedur=bukaquery("select kode from prosedur_pasien where no_rawat='".$baris["no_rawat"]."' order by prioritas asc");
@@ -102,9 +102,13 @@ if(empty($tahunawal)){
                             }                
                             $a++;
                         } 
-                        
+
                         $discharge_status="5";
-                        if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Rujuk' and no_rawat='".$baris["no_rawat"]."'")>0){
+                        if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Sembuh' and no_rawat='".$baris["no_rawat"]."'")>0){
+                            $discharge_status="1";
+                        }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Sehat' and no_rawat='".$baris["no_rawat"]."'")>0){
+                            $discharge_status="1";
+                        }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Rujuk' and no_rawat='".$baris["no_rawat"]."'")>0){
                             $discharge_status="2";
                         }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='APS' and no_rawat='".$baris["no_rawat"]."'")>0){
                             $discharge_status="3";
@@ -114,7 +118,15 @@ if(empty($tahunawal)){
                             $discharge_status="4";
                         }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='+' and no_rawat='".$baris["no_rawat"]."'")>0){
                             $discharge_status="4";
-                        }                        
+                        }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Atas Persetujuan Dokter' and no_rawat='".$baris["no_rawat"]."'")>0){
+                            $discharge_status="1";
+                        }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Atas Permintaan Sendiri' and no_rawat='".$baris["no_rawat"]."'")>0){
+                            $discharge_status="3";
+                        }else if(getOne("select count(no_rawat) from kamar_inap where stts_pulang='Lain-lain' and no_rawat='".$baris["no_rawat"]."'")>0){
+                            $discharge_status="5";
+                        }else{
+                            $discharge_status="1";
+                        }                     
                         
                         echo "<tr class='isi' title='".$baris["no_rawat"].", ".$baris["no_sep"].", ".$baris["tglsep"].", ".$baris["no_kartu"].", ".$baris["nomr"].", ".$baris["nama_pasien"]."'>
                                 <td valign='top'>".$baris["no_rawat"]."</td>
